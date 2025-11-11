@@ -1,0 +1,10 @@
+torch
+transformers[torch]
+datasets
+evaluate
+accelerate
+sentencepiece
+textstat
+pandas
+numpy
+scikit-learn
