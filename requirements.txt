@@ -8,3 +8,11 @@ textstat
 pandas
 numpy
 scikit-learn
+nltk
+beautifulsoup4
+lxml
+html5lib
+requests
+tqdm
+regex
+python-dateutil
