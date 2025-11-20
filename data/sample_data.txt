@@ -1,0 +1,811 @@
+pursuant to the provisions herein	according to the rules here
+the party of the first part agrees	the first person agrees
+hereinbefore mentioned	mentioned earlier
+notwithstanding the foregoing	despite what was said before
+in the event that	if
+shall be deemed to be	will be considered
+without prejudice to	without affecting
+subject to the provisions of	according to the rules of
+in accordance with	according to
+for the avoidance of doubt	to be clear
+mutatis mutandis	with necessary changes
+inter alia	among other things
+prima facie	at first glance
+bona fide	in good faith
+ex parte	from one side only
+habeas corpus	show the body
+pro bono	for free
+quid pro quo	something for something
+status quo	the current situation
+ad hoc	for this purpose
+per se	by itself
+ipso facto	by that very fact
+caveat emptor	buyer beware
+res ipsa loquitur	the thing speaks for itself
+stare decisis	to stand by things decided
+voir dire	to speak the truth
+amicus curiae	friend of the court
+modus operandi	method of operation
+prima facie case	case that seems true at first
+beyond reasonable doubt	very certain
+preponderance of evidence	more evidence than not
+burden of proof	responsibility to prove
+hearsay evidence	secondhand information
+direct evidence	firsthand proof
+circumstantial evidence	indirect proof
+affidavit	sworn written statement
+subpoena	order to appear in court
+deposition	sworn testimony outside court
+voir dire	questioning of jurors
+mistrial	failed trial
+hung jury	jury that cannot agree
+acquittal	found not guilty
+conviction	found guilty
+plea bargain	agreement to plead guilty
+sentence	punishment given
+probation	supervised release
+parole	early release from prison
+appeal	request for review
+remand	send back to lower court
+overturn	reverse a decision
+uphold	keep a decision
+precedent	previous court decision
+statute	law passed by legislature
+regulation	rule made by agency
+ordinance	local law
+constitution	basic law of the land
+amendment	change to constitution
+ratification	official approval
+repeal	cancel a law
+enact	pass a law
+legislative intent	what lawmakers meant
+judicial review	court review of law
+separation of powers	division of government powers
+checks and balances	limits on government power
+due process	fair legal procedures
+equal protection	same treatment under law
+freedom of speech	right to speak freely
+freedom of religion	right to practice religion
+right to assembly	right to gather
+right to petition	right to ask government
+search warrant	permission to search
+probable cause	good reason to believe
+reasonable suspicion	some reason to suspect
+exclusionary rule	rule excluding illegal evidence
+miranda rights	rights when arrested
+right to counsel	right to a lawyer
+right to remain silent	right not to speak
+self incrimination	testifying against yourself
+double jeopardy	being tried twice for same crime
+cruel and unusual punishment	unfair punishment
+excessive bail	too high bail
+eminent domain	government taking property
+just compensation	fair payment
+takings clause	rule about taking property
+contract	legal agreement
+breach of contract	breaking an agreement
+consideration	something of value exchanged
+offer	proposal to make a deal
+acceptance	agreeing to an offer
+capacity	ability to make a contract
+void contract	invalid contract
+voidable contract	contract that can be canceled
+unenforceable contract	contract that cannot be enforced
+specific performance	order to do what was promised
+damages	money compensation
+liquidated damages	agreed upon damages
+punitive damages	punishment damages
+compensatory damages	damages to make up for loss
+negligence	failure to be careful
+duty of care	responsibility to be careful
+breach of duty	not meeting responsibility
+causation	connection between action and harm
+proximate cause	direct cause
+foreseeability	ability to predict harm
+contributory negligence	plaintiff also at fault
+comparative negligence	comparing fault
+assumption of risk	taking on known danger
+strict liability	liability without fault
+product liability	manufacturer responsibility
+defamation	harmful false statement
+libel	written defamation
+slander	spoken defamation
+invasion of privacy	violating personal privacy
+intentional infliction of emotional distress	causing severe emotional harm
+battery	harmful touching
+assault	threat of harm
+false imprisonment	unlawful restraint
+trespass	entering property without permission
+nuisance	interfering with property use
+conversion	unlawful taking of property
+fraud	deceitful misrepresentation
+misrepresentation	false statement
+undue influence	improper pressure
+duress	threat or force
+mistake	error in understanding
+unconscionability	unfair contract terms
+statute of frauds	law requiring written contracts
+statute of limitations	time limit to sue
+sovereign immunity	government cannot be sued
+qualified immunity	limited protection for officials
+absolute immunity	complete protection
+discovery	exchange of information before trial
+interrogatories	written questions
+request for production	request for documents
+request for admission	request to admit facts
+deposition	sworn testimony
+expert witness	qualified specialist
+lay witness	ordinary person witness
+character evidence	evidence about person's character
+hearsay	secondhand statement
+hearsay exception	allowed secondhand statement
+business records exception	company records allowed
+dying declaration	statement before death
+excited utterance	statement while upset
+present sense impression	immediate statement
+prior inconsistent statement	previous different statement
+prior consistent statement	previous same statement
+impeachment	challenging witness credibility
+rehabilitation	restoring witness credibility
+leading question	question suggesting answer
+objection	challenge to question or evidence
+sustained	objection approved
+overruled	objection denied
+motion	request to court
+motion to dismiss	request to throw out case
+motion for summary judgment	request for decision without trial
+motion in limine	request before trial
+motion to suppress	request to exclude evidence
+motion to compel	request to force action
+default judgment	judgment when defendant does not respond
+summary judgment	decision without full trial
+directed verdict	judge's decision during trial
+judgment notwithstanding verdict	judgment despite jury verdict
+new trial	fresh trial
+remittitur	reducing damages
+additur	increasing damages
+injunction	court order to do or stop something
+temporary restraining order	short term order
+preliminary injunction	temporary order until trial
+permanent injunction	final order
+contempt of court	violating court order
+sanctions	penalties for bad behavior
+attorney fees	lawyer costs
+costs	court expenses
+prejudgment interest	interest before judgment
+post judgment interest	interest after judgment
+execution	enforcing judgment
+garnishment	taking money from wages
+levy	taking property
+lien	claim on property
+foreclosure	taking property for debt
+bankruptcy	legal process for debt relief
+chapter 7	liquidation bankruptcy
+chapter 11	reorganization bankruptcy
+chapter 13	repayment plan bankruptcy
+automatic stay	stop on collection actions
+discharge	elimination of debt
+exempt property	property that cannot be taken
+preference payment	payment before bankruptcy
+fraudulent transfer	transfer to avoid creditors
+cramdown	forcing plan on creditors
+absolute priority rule	rule about payment order
+reaffirmation	agreeing to pay discharged debt
+trustee	person managing bankruptcy
+debtor	person filing bankruptcy
+creditor	person owed money
+secured creditor	creditor with collateral
+unsecured creditor	creditor without collateral
+priority creditor	creditor paid first
+administrative expense	cost of bankruptcy process
+proof of claim	evidence of debt
+objection to claim	challenge to debt
+avoidance power	power to undo transfers
+preference	payment before bankruptcy
+fraudulent conveyance	transfer to avoid creditors
+strong arm power	power to avoid liens
+executory contract	contract not fully performed
+rejection of contract	ending contract
+assumption of contract	taking on contract
+assignment of contract	transferring contract
+intellectual property	creations of the mind
+patent	exclusive right to invention
+copyright	exclusive right to creative work
+trademark	exclusive right to brand
+trade secret	confidential business information
+infringement	violation of intellectual property right
+fair use	allowed use of copyrighted work
+derivative work	work based on another work
+work for hire	work owned by employer
+public domain	works not protected by copyright
+prior art	previous inventions
+non obviousness	requirement for patent
+novelty	requirement for patent
+utility	usefulness requirement for patent
+enablement	requirement to describe invention
+best mode	requirement to describe best way
+claim	part of patent defining invention
+specification	description of invention
+prosecution	process of getting patent
+office action	patent office response
+rejection	refusal of patent application
+allowance	approval of patent application
+maintenance fee	fee to keep patent
+infringement	violation of patent
+literal infringement	exact violation
+doctrine of equivalents	similar violation
+contributory infringement	helping infringement
+inducement of infringement	encouraging infringement
+willful infringement	intentional violation
+damages	money for infringement
+reasonable royalty	fair payment for use
+lost profits	profits lost due to infringement
+injunctive relief	order to stop infringement
+declaratory judgment	decision about rights
+invalidity	patent is not valid
+unenforceability	patent cannot be enforced
+estoppel	prevented from making argument
+prosecution history estoppel	limited by patent history
+file wrapper estoppel	limited by patent file
+inter partes review	challenge to patent
+post grant review	challenge after grant
+reexamination	review of patent
+interference	dispute over invention
+derivation proceeding	dispute over inventorship
+supplemental examination	additional review
+ex parte reexamination	one sided review
+trademark	word symbol or design identifying source
+service mark	trademark for services
+trade dress	appearance of product or packaging
+collective mark	mark used by group
+certification mark	mark certifying quality
+geographical indication	mark indicating origin
+fanciful mark	made up word
+arbitrary mark	unrelated word
+suggestive mark	hinting at product
+descriptive mark	describing product
+generic mark	common name
+secondary meaning	acquired distinctiveness
+likelihood of confusion	risk of confusion
+strength of mark	distinctiveness of mark
+similarity of marks	how similar marks are
+similarity of goods	how similar products are
+channels of trade	how products are sold
+purchaser sophistication	how careful buyers are
+actual confusion	real confusion occurred
+intent	whether intentional
+dilution	weakening of famous mark
+blurring	weakening by use on different goods
+tarnishment	harming reputation
+famous mark	well known mark
+registration	official record of mark
+application	request for registration
+examination	review of application
+office action	response from trademark office
+opposition	challenge to registration
+cancellation	removal from register
+renewal	keeping registration current
+abandonment	losing trademark rights
+use in commerce	use in business
+intent to use	plan to use mark
+constructive use	legal use before actual use
+supplemental register	secondary register
+principal register	main register
+incontestability	strong protection after time
+fraud	lying on application
+genericness	becoming common name
+functionality	useful feature not protectable
+aesthetic functionality	attractive feature not protectable
+copyright	exclusive right to creative expression
+work of authorship	creative work
+originality	requirement for copyright
+fixation	requirement to be in tangible form
+idea expression dichotomy	ideas not protected only expression
+merger doctrine	when idea and expression merge
+scenes a faire	standard elements
+fair use	allowed use without permission
+first sale doctrine	right to resell copy
+compulsory license	required license
+statutory license	license by law
+mechanical license	license for recording
+synchronization license	license for video
+public performance right	right to perform publicly
+public display right	right to display publicly
+reproduction right	right to make copies
+distribution right	right to distribute
+derivative work right	right to make adaptations
+moral rights	rights of attribution and integrity
+work for hire	work owned by employer
+joint work	work by multiple authors
+collective work	collection of works
+compilation	collection of works
+derivative work	work based on another
+adaptation	version of work
+translation	version in different language
+infringement	violation of copyright
+direct infringement	direct violation
+contributory infringement	helping violation
+vicarious infringement	benefiting from violation
+substantial similarity	similar enough to infringe
+access	opportunity to see work
+copying	taking from work
+improper appropriation	taking too much
+de minimis	too small to matter
+parody	humorous imitation
+satire	humorous criticism
+transformative use	changing work significantly
+commercial use	use for profit
+noncommercial use	use not for profit
+educational use	use for teaching
+news reporting	use for news
+criticism	use for review
+comment	use for discussion
+research	use for study
+statutory damages	damages set by law
+actual damages	real losses
+profits	earnings from infringement
+attorney fees	lawyer costs
+injunctive relief	order to stop infringement
+impoundment	seizing infringing copies
+destruction	destroying infringing copies
+registration	official record of copyright
+deposit	copy sent to library
+application	request for registration
+certificate	proof of registration
+preregistration	early registration
+renewal	extending copyright term
+termination	ending transfer of rights
+work made for hire	work owned by employer
+commissioned work	work ordered by someone
+employment	work by employee
+independent contractor	worker not employee
+joint authorship	multiple authors
+contribution	part of joint work
+intent	plan to merge contributions
+inseparable	parts cannot be separated
+interdependent	parts depend on each other
+divisible copyright	separate rights
+indivisible copyright	unified rights
+transfer	giving rights to someone
+assignment	complete transfer
+exclusive license	only license
+nonexclusive license	one of many licenses
+sublicense	license from licensee
+termination right	right to end transfer
+reversion	rights returning to author
+statute of limitations	time limit to sue
+discovery rule	time starts when discovered
+continuing infringement	ongoing violation
+willful infringement	intentional violation
+innocent infringement	unintentional violation
+criminal copyright infringement	crime of infringement
+circumvention	avoiding protection
+anti circumvention	law against avoiding protection
+digital rights management	technology protecting works
+technological protection measure	technology preventing copying
+safe harbor	protection for service providers
+notice and takedown	process for removing content
+counter notification	response to takedown
+repeat infringer	person who infringes repeatedly
+trade secret	confidential business information
+misappropriation	taking trade secret
+improper means	unfair way to get secret
+breach of duty	violating responsibility
+unauthorized disclosure	revealing without permission
+unauthorized use	using without permission
+reasonable efforts	reasonable steps to protect
+secrecy	keeping information secret
+economic value	worth of information
+not generally known	not widely known
+not readily ascertainable	not easily found out
+confidentiality agreement	agreement to keep secret
+nondisclosure agreement	agreement not to reveal
+noncompete agreement	agreement not to compete
+nonsolicitation agreement	agreement not to recruit
+inevitable disclosure	will definitely reveal
+injunction	order to stop
+damages	money compensation
+royalty	payment for use
+unjust enrichment	unfair benefit
+attorney fees	lawyer costs
+criminal penalties	punishment for crime
+economic espionage	stealing trade secrets
+defend trade secrets act	law protecting trade secrets
+uniform trade secrets act	model law for states
+inevitable disclosure doctrine	rule about future disclosure
+springboard injunction	order preventing advantage
+head start	time advantage
+springboard period	time of advantage
+confidential relationship	relationship of trust
+fiduciary duty	responsibility of trust
+employee duty	loyalty to employer
+former employee	ex worker
+current employee	current worker
+independent contractor	worker not employee
+third party	other person
+competitor	rival business
+customer	person who buys
+supplier	person who provides
+joint venture	shared business
+partnership	business together
+license	permission to use
+exclusive license	only permission
+nonexclusive license	one permission
+sublicense	permission from licensee
+assignment	transfer of rights
+royalty	payment for license
+upfront payment	payment at start
+milestone payment	payment at achievement
+running royalty	ongoing payment
+lump sum payment	one time payment
+minimum annual royalty	least yearly payment
+most favored nation	best terms given
+grant back	giving improvements back
+field of use	area where can use
+territorial restriction	geographic limit
+exclusivity	whether exclusive
+improvements	better versions
+derivatives	versions based on original
+enforcement	protecting rights
+infringement	violation of rights
+notice	telling about violation
+cure	fixing violation
+termination	ending license
+breach	violating agreement
+remedy	way to fix problem
+damages	money compensation
+injunction	order to stop
+specific performance	order to do something
+accounting	reporting of use
+audit	checking records
+confidentiality	keeping secret
+warranty	promise about quality
+disclaimer	statement limiting responsibility
+indemnification	protection from claims
+limitation of liability	limit on responsibility
+cap on damages	maximum damages
+consequential damages	indirect losses
+incidental damages	related losses
+lost profits	profits not earned
+punitive damages	punishment damages
+liquidated damages	agreed damages
+attorney fees	lawyer costs
+governing law	which law applies
+jurisdiction	which court
+venue	where court is
+arbitration	dispute resolution outside court
+mediation	helping parties agree
+alternative dispute resolution	ways other than court
+binding arbitration	decision must be followed
+non binding arbitration	decision is suggestion
+expert determination	decision by specialist
+negotiation	talking to agree
+settlement	agreement to end dispute
+release	giving up claims
+covenant not to sue	agreement not to sue
+confidentiality	keeping settlement secret
+nondisparagement	agreement not to criticize
+liquidated damages	agreed damages
+penalty	punishment for breach
+unenforceable penalty	penalty that cannot be enforced
+reasonable estimate	fair guess of damages
+difficult to estimate	hard to predict damages
+actual damages	real losses
+breach of contract	breaking agreement
+material breach	important violation
+minor breach	small violation
+anticipatory breach	breach before time
+repudiation	refusing to perform
+rescission	canceling contract
+reformation	changing contract
+restitution	returning benefits
+quasi contract	implied contract
+unjust enrichment	unfair benefit
+quantum meruit	as much as deserved
+promissory estoppel	bound by promise
+detrimental reliance	harmful reliance
+statute of frauds	law requiring writing
+parol evidence rule	rule about outside evidence
+integration clause	clause saying complete agreement
+merger clause	clause merging agreements
+entire agreement	complete agreement
+no oral modification	changes must be written
+severability	parts can be separated
+waiver	giving up right
+modification	changing agreement
+amendment	formal change
+supplement	addition to agreement
+assignment	transferring rights
+delegation	transferring duties
+novation	substituting party
+third party beneficiary	person who benefits
+intended beneficiary	person meant to benefit
+incidental beneficiary	person who happens to benefit
+privity	direct relationship
+privity of contract	direct contract relationship
+lack of privity	no direct relationship
+third party rights	rights of others
+assignment	transferring rights
+assignor	person transferring
+assignee	person receiving
+delegation	transferring duties
+delegator	person transferring
+delegatee	person receiving
+nondelegable duty	duty that cannot be transferred
+personal service	service requiring specific person
+undue burden	too much difficulty
+material change	important change
+notice	telling about transfer
+consent	agreement to transfer
+prohibition	rule against transfer
+restriction	limit on transfer
+condition	requirement
+condition precedent	requirement before
+condition subsequent	requirement after
+concurrent condition	requirement at same time
+express condition	stated requirement
+implied condition	suggested requirement
+constructive condition	assumed requirement
+satisfaction	meeting requirement
+substantial performance	mostly meeting requirement
+perfect tender	exact meeting of requirement
+material breach	important violation
+minor breach	small violation
+cure	fixing violation
+notice of breach	telling about violation
+opportunity to cure	chance to fix
+time to cure	time to fix
+reasonable time	fair amount of time
+impossibility	cannot be done
+impracticability	too difficult to do
+frustration of purpose	goal cannot be achieved
+force majeure	unavoidable event
+act of god	natural disaster
+war	armed conflict
+strike	worker stoppage
+government action	action by government
+change in law	law changed
+supervening illegality	becoming illegal
+destruction of subject matter	thing destroyed
+death	person died
+incapacity	person unable
+commercial impracticability	too expensive to do
+unforeseen circumstances	unexpected events
+foreseeable	able to predict
+assumption of risk	taking on risk
+allocation of risk	who bears risk
+insurance	protection against loss
+warranty	guarantee
+express warranty	stated guarantee
+implied warranty	suggested guarantee
+warranty of merchantability	guarantee of basic quality
+warranty of fitness	for particular purpose	guarantee for specific use
+warranty of title	guarantee of ownership
+warranty against infringement	guarantee of no violation
+disclaimer	statement limiting guarantee
+as is	no guarantee
+with all faults	accepting problems
+merchantability	basic quality
+fitness	for particular purpose	suitable for specific use
+particular purpose	specific use
+ordinary purpose	normal use
+merchant	seller who deals in goods
+consumer	buyer for personal use
+privity	direct relationship
+horizontal privity	relationship between buyer and seller
+vertical privity	relationship in chain
+remote purchaser	buyer not from original seller
+economic loss	financial harm
+property damage	harm to property
+personal injury	harm to person
+consequential damages	indirect losses
+incidental damages	related losses
+lost profits	profits not earned
+diminution in value	reduction in worth
+cost of repair	cost to fix
+cost of replacement	cost to replace
+cover	buying substitute
+mitigation	reducing losses
+duty to mitigate	responsibility to reduce losses
+foreseeability	ability to predict
+hadley v baxendale	case about foreseeability
+tacit agreement	test	for agreement about damages
+contemplation of parties	what parties thought about
+special circumstances	unusual situation
+general damages	normal losses
+special damages	unusual losses
+liquidated damages	agreed damages
+penalty	punishment
+reasonable estimate	fair guess
+difficult to estimate	hard to predict
+actual damages	real losses
+grossly disproportionate	way too much
+unenforceable penalty	penalty that cannot be enforced
+specific performance	order to do something
+adequacy of damages	whether money is enough
+unique goods	one of a kind items
+land	real property
+personal property	things you own
+real property	land and buildings
+chattel	personal property
+goods	things that can be moved
+services	work performed
+intangibles	things you cannot touch
+securities	investments
+money	cash
+negotiable instruments	transferable documents
+documents of title	proof of ownership
+investment securities	stocks and bonds
+accounts	rights to payment
+chattel paper	record of debt secured by goods
+instruments	written promises to pay
+general intangibles	other personal property
+fixtures	things attached to land
+accessions	things added to goods
+commingled goods	mixed together
+processed goods	changed goods
+software	computer programs
+licenses	permissions
+franchises	business rights
+goodwill	business reputation
+going concern value	value of operating business
+intangibles	things you cannot touch
+contract rights	rights under contracts
+tort claims	claims for harm
+insurance proceeds	money from insurance
+deposit accounts	bank accounts
+letter of credit	bank guarantee
+supporting obligation	guarantee of payment
+commercial tort claim	claim for business harm
+as extracted collateral	from land
+timber	wood from trees
+minerals	things from ground
+accounts	rights to payment
+accounts receivable	money owed to business
+chattel paper	record of debt secured by goods
+instruments	written promises to pay
+investment property	stocks and bonds
+general intangibles	other personal property
+deposit accounts	bank accounts
+letter of credit	bank guarantee
+supporting obligation	guarantee of payment
+commercial tort claim	claim for business harm
+health care insurance receivable	money from health insurance
+as extracted collateral	from land
+timber	wood from trees
+oil	petroleum
+gas	natural gas
+minerals	things from ground
+attachment	security interest becomes effective
+perfection	making security interest good against others
+filing	recording with government
+possession	having the thing
+control	having power over thing
+automatic perfection	perfection without filing
+temporary perfection	short term perfection
+purchase money security interest	security interest for thing bought
+consumer goods	things for personal use
+farm products	things from farming
+inventory	things for sale
+equipment	things for business
+fixtures	things attached to land
+accounts	rights to payment
+general intangibles	other personal property
+proceeds	money from sale
+after acquired property	property gotten later
+future advances	money lent later
+floating lien	security interest in changing things
+commingled	 mixed together
+accessions	things added
+processed	changed
+transformed	changed into something else
+identifiable	able to tell apart
+traceable	able to follow
+commingled goods	mixed together
+accessions	things added to goods
+commingled proceeds	mixed money
+identifiable proceeds	money you can tell apart
+traceable proceeds	money you can follow
+commingled	 mixed together
+accessions	things added
+processed	changed
+transformed	changed into something else
+identifiable	able to tell apart
+traceable	able to follow
+priority	who gets paid first
+first to file	first to record
+first to perfect	first to make good
+purchase money priority	priority for thing bought
+buyer in ordinary course	buyer in normal business
+holder in due course	person who got instrument properly
+bona fide purchaser	good faith buyer
+floating lien	security interest in changing things
+after acquired property	property gotten later
+future advances	money lent later
+proceeds	money from sale
+identifiable	able to tell apart
+traceable	able to follow
+commingled	 mixed together
+accessions	things added
+processed	changed
+transformed	changed into something else
+default	failure to pay
+acceleration	making all due now
+repossession	taking back
+foreclosure	taking property for debt
+strict foreclosure	keeping property without sale
+judicial foreclosure	foreclosure through court
+nonjudicial foreclosure	foreclosure without court
+power of sale	right to sell
+deficiency	amount still owed
+surplus	extra money
+redemption	right to buy back
+statutory redemption	right by law
+equitable redemption	right in fairness
+right of redemption	right to buy back
+deficiency judgment	judgment for amount still owed
+antideficiency legislation	law limiting deficiency
+one action rule	rule about one lawsuit
+security first rule	rule about using security first
+fair value	reasonable price
+commercially reasonable sale	sale done fairly
+notice of sale	telling about sale
+public sale	sale open to all
+private sale	sale to specific buyer
+strict foreclosure	keeping property without sale
+judicial foreclosure	foreclosure through court
+nonjudicial foreclosure	foreclosure without court
+power of sale	right to sell
+deficiency	amount still owed
+surplus	extra money
+redemption	right to buy back
+statutory redemption	right by law
+equitable redemption	right in fairness
+right of redemption	right to buy back
+deficiency judgment	judgment for amount still owed
+antideficiency legislation	law limiting deficiency
+one action rule	rule about one lawsuit
+security first rule	rule about using security first
+fair value	reasonable price
+commercially reasonable sale	sale done fairly
+notice of sale	telling about sale
+public sale	sale open to all
+private sale	sale to specific buyer
+strict foreclosure	keeping property without sale
+judicial foreclosure	foreclosure through court
+nonjudicial foreclosure	foreclosure without court
+power of sale	right to sell
+deficiency	amount still owed
+surplus	extra money
+redemption	right to buy back
+statutory redemption	right by law
+equitable redemption	right in fairness
+right of redemption	right to buy back
+deficiency judgment	judgment for amount still owed
+antideficiency legislation	law limiting deficiency
+one action rule	rule about one lawsuit
+security first rule	rule about using security first
+fair value	reasonable price
+commercially reasonable sale	sale done fairly
+notice of sale	telling about sale
+public sale	sale open to all
+private sale	sale to specific buyer
+strict foreclosure	keeping property without sale
+judicial foreclosure	foreclosure through court
+nonjudicial foreclosure	foreclosure without court
+power of sale	right to sell
+deficiency	amount still owed
+surplus	extra money
+redemption	right to buy back
+statutory redemption	right by law
+equitable redemption	right in fairness
+right of redemption	right to buy back
+deficiency judgment	judgment for amount still owed
+antideficiency legislation	law limiting deficiency
+one action rule	rule about one lawsuit
+security first rule	rule about using security first
+fair value	reasonable price
+commercially reasonable sale	sale done fairly
+notice of sale	telling about sale
+public sale	sale open to all
+private sale	sale to specific buyer
