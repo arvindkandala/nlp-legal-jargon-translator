@@ -1,91 +1,100 @@
-from pathlib import Path
-from collections import Counter
+import csv
 import random
+import re
+from collections import Counter
+from pathlib import Path
 
 import pandas as pd
 import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
 
-# define parameters
+#SETTINGS & HYPERPARAMS
 
-DATA_PATH = Path("data/simple_pairs.csv")
-MAX_VOCAB_SIZE = 10000
-MAX_SRC_LEN = 60     # max tokens for legal sentence
-MAX_TGT_LEN = 60     # max tokens for plain English
-BATCH_SIZE = 32
-EMB_DIM = 128
+DATA_PATH = Path("data/simple_pairs.csv")   # src_legal, tgt_plain
+MODEL_DIR = Path("models/manual_simplifier")
+MODEL_DIR.mkdir(parents=True, exist_ok=True)
+
+MIN_FREQ = 2          # minimum word frequency to keep in vocab
+MAX_SRC_LEN = 80      # max tokens for source sentences
+MAX_TGT_LEN = 80      # max tokens for target sentences
+
+EMBED_DIM = 128
 HIDDEN_DIM = 256
-NUM_EPOCHS = 5
+BATCH_SIZE = 16
+NUM_EPOCHS = 5        # keep small for CPU, can increase later
 LEARNING_RATE = 1e-3
 
-device = torch.device("cuda" if torch.cuda.is_available()
-                      else "mps" if torch.backends.mps.is_available()
-                      else "cpu")
-print("Using device:", device)
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print("Using device:", DEVICE)
 
+# LOAD DATA & BUILD VOCAB
 
- #1) load the data
-
-df = pd.read_csv(DATA_PATH).dropna()
-src_texts = df["src_legal"].astype(str).tolist()
-tgt_texts = df["tgt_plain"].astype(str).tolist()
-
-print("Loaded", len(src_texts), "pairs")
-
-
-# 2) tokenization and vocabulary building
 
 def tokenize(text: str):
-    """Very simple tokenizer: lowercase + split on spaces."""
-    return text.lower().strip().split()
+    """
+    Very simple tokenizer: lowercase and split on words / punctuation.
+    """
+    text = str(text).strip().lower()
+    # words or individual non-whitespace characters
+    return re.findall(r"\w+|\S", text)
 
 
-# build word frequency counter over both src and tgt
+df = pd.read_csv(DATA_PATH)
+src_list = df["src_legal"].astype(str).tolist()
+tgt_list = df["tgt_plain"].astype(str).tolist()
+
+print(f"Loaded {len(src_list)} pairs from {DATA_PATH}")
+
+# collect token counts from both source and target
 counter = Counter()
-for s in src_texts + tgt_texts:
+for s, t in zip(src_list, tgt_list):
     counter.update(tokenize(s))
+    counter.update(tokenize(t))
 
 # special tokens
-PAD_TOKEN = "<pad>" # padding token in case sentence too short
-SOS_TOKEN = "<sos>" # start of sentence
-EOS_TOKEN = "<eos>" # end of sentence
-UNK_TOKEN = "<unk>" # unknown token for words not in vocab
+PAD = "<pad>"
+UNK = "<unk>"
+SOS = "<sos>"
+EOS = "<eos>"
 
-special_tokens = [PAD_TOKEN, SOS_TOKEN, EOS_TOKEN, UNK_TOKEN]
-word2idx = {tok: i for i, tok in enumerate(special_tokens)}
+# start vocab with specials
+vocab = [PAD, UNK, SOS, EOS]
 
-# Add most common words up to MAX_VOCAB_SIZE
-for word, freq in counter.most_common(MAX_VOCAB_SIZE - len(special_tokens)):
-    if word not in word2idx:
-        word2idx[word] = len(word2idx)
+for tok, freq in counter.most_common():
+    if freq >= MIN_FREQ and tok not in vocab:
+        vocab.append(tok)
 
+word2idx = {w: i for i, w in enumerate(vocab)}
 idx2word = {i: w for w, i in word2idx.items()}
 
-PAD_IDX = word2idx[PAD_TOKEN]
-SOS_IDX = word2idx[SOS_TOKEN]
-EOS_IDX = word2idx[EOS_TOKEN]
-UNK_IDX = word2idx[UNK_TOKEN]
+PAD_IDX = word2idx[PAD]
+UNK_IDX = word2idx[UNK]
+SOS_IDX = word2idx[SOS]
+EOS_IDX = word2idx[EOS]
 
-vocab_size = len(word2idx)
+vocab_size = len(vocab)
 print("Vocab size:", vocab_size)
 
 
 def encode(text: str, max_len: int):
-    """Turn text into a list of token IDs with <sos>, <eos>, padding."""
+    """
+    Turn text into a fixed-length list of token IDs:
+      [<sos>, w1, w2, ..., <eos>, <pad>, ...]
+    """
     tokens = tokenize(text)
     ids = [word2idx.get(tok, UNK_IDX) for tok in tokens]
     ids = [SOS_IDX] + ids + [EOS_IDX]
-    # pad or truncate
     if len(ids) < max_len:
         ids = ids + [PAD_IDX] * (max_len - len(ids))
     else:
         ids = ids[:max_len]
-        ids[-1] = EOS_IDX  # ensure last token is EOS if truncated
+        ids[-1] = EOS_IDX  # ensure we end with EOS if truncated
     return ids
 
 
-# 3) data set and load 
+# DATASET & DATALOADERS 
+
 
 class LegalSimpleDataset(Dataset):
     def __init__(self, src_list, tgt_list):
@@ -96,202 +105,247 @@ class LegalSimpleDataset(Dataset):
         return len(self.src_list)
 
     def __getitem__(self, idx):
-        src = encode(self.src_list[idx], MAX_SRC_LEN)
-        tgt = encode(self.tgt_list[idx], MAX_TGT_LEN)
+        src_ids = encode(self.src_list[idx], MAX_SRC_LEN)
+        tgt_ids = encode(self.tgt_list[idx], MAX_TGT_LEN)
         return (
-            torch.tensor(src, dtype=torch.long),
-            torch.tensor(tgt, dtype=torch.long),
+            torch.tensor(src_ids, dtype=torch.long),
+            torch.tensor(tgt_ids, dtype=torch.long),
         )
 
 
-# simple train/val split
-data = list(zip(src_texts, tgt_texts))
-random.seed(42)
-random.shuffle(data)
-split_idx = int(0.9 * len(data))
-train_pairs = data[:split_idx]
-val_pairs = data[split_idx:]
+# simple 80/20 split
+n_total = len(src_list)
+n_train = int(0.8 * n_total)
+indices = list(range(n_total))
+random.shuffle(indices)
+train_idx = indices[:n_train]
+val_idx = indices[n_train:]
 
-train_src, train_tgt = zip(*train_pairs)
-val_src, val_tgt = zip(*val_pairs)
+train_src = [src_list[i] for i in train_idx]
+train_tgt = [tgt_list[i] for i in train_idx]
+val_src = [src_list[i] for i in val_idx]
+val_tgt = [tgt_list[i] for i in val_idx]
 
-train_dataset = LegalSimpleDataset(train_src, train_tgt)
-val_dataset = LegalSimpleDataset(val_src, val_tgt)
+train_data = LegalSimpleDataset(train_src, train_tgt)
+val_data = LegalSimpleDataset(val_src, val_tgt)
 
-train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
-val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE)
+train_loader = DataLoader(
+    train_data, batch_size=BATCH_SIZE, shuffle=True, drop_last=False
+)
+val_loader = DataLoader(
+    val_data, batch_size=BATCH_SIZE, shuffle=False, drop_last=False
+)
+
+print(f"Train size: {len(train_data)}, Val size: {len(val_data)}")
 
 
-# 4. model definition 
+# ATTENTION-BASED SEQ2SEQ MODEL 
+
+
+class DotAttention(nn.Module):
+    """
+    Luong dot-product attention.
+    """
+
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, hidden, encoder_outputs):
+        """
+        hidden: (B, H)       - current decoder hidden state
+        encoder_outputs: (B, src_len, H) - all encoder outputs
+        Returns:
+          context: (B, H)    - weighted sum of encoder_outputs
+          attn_weights: (B, src_len)
+        """
+        # scores: (B, src_len)
+        scores = torch.bmm(
+            encoder_outputs, hidden.unsqueeze(2)
+        ).squeeze(2)
+
+        attn_weights = torch.softmax(scores, dim=1)
+        # context: (B, 1, H) -> (B, H)
+        context = torch.bmm(
+            attn_weights.unsqueeze(1), encoder_outputs
+        ).squeeze(1)
+        return context, attn_weights
+
 
 class Seq2Seq(nn.Module):
-    """
-    Encoder-decoder with shared embedding and GRU.
-    Very simple: no attention, greedy decoding.
-    """
-
-    def __init__(self, vocab_size, emb_dim, hidden_dim, pad_idx):
+    def __init__(self, vocab_size, embed_dim, hidden_dim, pad_idx):
         super().__init__()
-        self.vocab_size = vocab_size
-        self.hidden_dim = hidden_dim
-
-        self.embedding = nn.Embedding(vocab_size, emb_dim, padding_idx=pad_idx) #128 dimesion imbedding vector
-
-        self.encoder = nn.GRU( #simpler version of LSTM with only update and reset gates 
-            emb_dim, hidden_dim, batch_first=True
-        )  # input: (B, src_len, emb_dim)
-
+        self.embedding = nn.Embedding(
+            vocab_size, embed_dim, padding_idx=pad_idx
+        )
+        self.encoder = nn.GRU(
+            embed_dim, hidden_dim, batch_first=True
+        )
         self.decoder = nn.GRU(
-            emb_dim, hidden_dim, batch_first=True
-        )  # input: (B, 1, emb_dim) step by step
+            embed_dim, hidden_dim, batch_first=True
+        )
+        self.attn = DotAttention()
+        self.out = nn.Linear(hidden_dim * 2, vocab_size)
 
-        self.out = nn.Linear(hidden_dim, vocab_size)
-
-    def forward(self, src, tgt, teacher_forcing_ratio=0.5):
+    def forward(self, src, tgt, teacher_forcing_ratio=0.8):
         """
         src: (B, src_len)
-        tgt: (B, tgt_len)
-        Returns logits of shape (B, tgt_len, vocab_size)
+        tgt: (B, tgt_len)  -- contains <sos> and <eos>
+        Returns:
+          logits: (B, tgt_len, vocab_size)
         """
         batch_size, tgt_len = tgt.shape
 
-        # Encoder 
+        # 1) encode source
         embedded_src = self.embedding(src)  # (B, src_len, E)
-        _, hidden = self.encoder(embedded_src)  # hidden: (1, B, H)
+        encoder_outputs, hidden = self.encoder(embedded_src)
+        # hidden: (1, B, H) because 1-layer GRU
 
-        # Decoder
-        outputs = torch.zeros(
-            batch_size, tgt_len, self.vocab_size, device=src.device
+        # 2) decode with attention
+        logits = torch.zeros(
+            batch_size, tgt_len, vocab_size, device=src.device
         )
 
-        # first input to decoder = <sos> for every example
-        input_tok = torch.full(
-            (batch_size,), SOS_IDX, dtype=torch.long, device=src.device
-        )  # (B,)
+        # first decoder input is <sos> for every example
+        input_tok = tgt[:, 0]  # (B,)
 
-        for t in range(tgt_len):
-            # embed current input token
+        for t in range(1, tgt_len):
             embedded = self.embedding(input_tok).unsqueeze(1)  # (B, 1, E)
+            dec_output, hidden = self.decoder(embedded, hidden)
+            # dec_output: (B, 1, H)
+            dec_hidden = hidden[-1]  # (B, H)
 
-            # one GRU step
-            output, hidden = self.decoder(embedded, hidden)  # output: (B, 1, H)
-            logits = self.out(output.squeeze(1))  # (B, vocab_size)
-            outputs[:, t, :] = logits
+            context, _ = self.attn(dec_hidden, encoder_outputs)  # (B, H)
+            combined = torch.cat(
+                [dec_output.squeeze(1), context], dim=1
+            )  # (B, 2H)
 
-            # decide next input token
+            step_logits = self.out(combined)  # (B, V)
+            logits[:, t, :] = step_logits
+
+            # choose next input token
             teacher_force = random.random() < teacher_forcing_ratio
-            top1 = logits.argmax(dim=1)  # (B,)
+            top1 = step_logits.argmax(dim=1)  # (B,)
+            input_tok = tgt[:, t] if teacher_force else top1
 
-            if teacher_force:
-                # use ground-truth token at this time step
-                input_tok = tgt[:, t]
-            else:
-                # use model prediction
-                input_tok = top1
+        return logits
 
-        return outputs
-
-    def generate(self, src, max_len=MAX_TGT_LEN):
+    def generate(self, src_text, max_len=MAX_TGT_LEN):
+        """
+        Greedy decoding with attention.
+        """
         self.eval()
         with torch.no_grad():
-            src = src.unsqueeze(0)  # (1, src_len)
-            embedded_src = self.embedding(src)
-            _, hidden = self.encoder(embedded_src)
+            src_ids = encode(src_text, MAX_SRC_LEN)
+            src_tensor = torch.tensor(
+                src_ids, dtype=torch.long, device=DEVICE
+            ).unsqueeze(0)  # (1, src_len)
 
-            input_tok = torch.tensor([SOS_IDX], device=src.device)
+            embedded_src = self.embedding(src_tensor)
+            encoder_outputs, hidden = self.encoder(embedded_src)
+
+            input_tok = torch.tensor(
+                [SOS_IDX], dtype=torch.long, device=DEVICE
+            )
             outputs = []
 
             for _ in range(max_len):
-                embedded = self.embedding(input_tok).unsqueeze(0)  # (1,1,E)
-                output, hidden = self.decoder(embedded, hidden)
-                logits = self.out(output.squeeze(1))  # (1,V)
-                top1 = logits.argmax(dim=1)  # (1,)
+                embedded = self.embedding(input_tok).unsqueeze(1)  # (1,1,E)
+                dec_output, hidden = self.decoder(embedded, hidden)
+                dec_hidden = hidden[-1]  # (1, H)
+
+                context, _ = self.attn(dec_hidden, encoder_outputs)
+                combined = torch.cat(
+                    [dec_output.squeeze(1), context], dim=1
+                )  # (1, 2H)
+                step_logits = self.out(combined)  # (1, V)
+                top1 = step_logits.argmax(dim=1)  # (1,)
+
                 token_id = top1.item()
-                if token_id == EOS_IDX:
+                if token_id in (EOS_IDX, PAD_IDX):
                     break
-                outputs.append(token_id)
+                outputs.append(idx2word.get(token_id, UNK))
                 input_tok = top1
 
-        # convert IDs back to words
-        tokens = [idx2word.get(i, UNK_TOKEN) for i in outputs]
-        return " ".join(tokens)
+        return " ".join(outputs)
 
 
-model = Seq2Seq(vocab_size, EMB_DIM, HIDDEN_DIM, PAD_IDX).to(device)
+model = Seq2Seq(vocab_size, EMBED_DIM, HIDDEN_DIM, PAD_IDX).to(DEVICE)
 print(model)
 
-
-# training setup
+# TRAINING & EVAL LOOPS 
 
 criterion = nn.CrossEntropyLoss(ignore_index=PAD_IDX)
 optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
 
-def train_epoch():
+def train_epoch(model, loader):
     model.train()
     total_loss = 0.0
-    for src_batch, tgt_batch in train_loader:
-        src_batch = src_batch.to(device)
-        tgt_batch = tgt_batch.to(device)
 
-        # model outputs: (B, tgt_len, vocab_size)
-        logits = model(src_batch, tgt_batch, teacher_forcing_ratio=0.5)
-
-        # reshape for loss: (B * tgt_len, vocab_size) vs (B * tgt_len)
-        B, T, V = logits.shape
-        loss = criterion(
-            logits.view(B * T, V),
-            tgt_batch.view(B * T),
-        )
+    for src_batch, tgt_batch in loader:
+        src_batch = src_batch.to(DEVICE)
+        tgt_batch = tgt_batch.to(DEVICE)
 
         optimizer.zero_grad()
+        logits = model(src_batch, tgt_batch, teacher_forcing_ratio=0.8)
+        # ignore first time step (where target is <sos>)
+        B, T, V = logits.shape
+        loss = criterion(
+            logits[:, 1:, :].reshape(B * (T - 1), V),
+            tgt_batch[:, 1:].reshape(B * (T - 1)),
+        )
         loss.backward()
+        nn.utils.clip_grad_norm_(model.parameters(), 1.0)
         optimizer.step()
 
-        total_loss += loss.item()
+        total_loss += loss.item() * src_batch.size(0)
 
-    return total_loss / len(train_loader)
+    return total_loss / len(loader.dataset)
 
 
-def eval_epoch():
+def eval_epoch(model, loader):
     model.eval()
     total_loss = 0.0
+
     with torch.no_grad():
-        for src_batch, tgt_batch in val_loader:
-            src_batch = src_batch.to(device)
-            tgt_batch = tgt_batch.to(device)
+        for src_batch, tgt_batch in loader:
+            src_batch = src_batch.to(DEVICE)
+            tgt_batch = tgt_batch.to(DEVICE)
 
             logits = model(src_batch, tgt_batch, teacher_forcing_ratio=0.0)
             B, T, V = logits.shape
             loss = criterion(
-                logits.view(B * T, V),
-                tgt_batch.view(B * T),
+                logits[:, 1:, :].reshape(B * (T - 1), V),
+                tgt_batch[:, 1:].reshape(B * (T - 1)),
             )
-            total_loss += loss.item()
-    return total_loss / len(val_loader)
+            total_loss += loss.item() * src_batch.size(0)
+
+    return total_loss / len(loader.dataset)
 
 
-# train loop 
+#  MAIN TRAINING LOOP 
 
 for epoch in range(1, NUM_EPOCHS + 1):
-    train_loss = train_epoch()
-    val_loss = eval_epoch()
-    print(f"Epoch {epoch}: train_loss={train_loss:.4f}  val_loss={val_loss:.4f}")
+    train_loss = train_epoch(model, train_loader)
+    val_loss = eval_epoch(model, val_loader)
 
-    # quick sanity check on one example
-    example_src = encode(src_texts[0], MAX_SRC_LEN)
-    gen = model.generate(torch.tensor(example_src, dtype=torch.long, device=device))
-    print("  Example src:", src_texts[0])
-    print("  Model out :", gen)
-    print("-" * 80)
+    print(
+        f"Epoch {epoch}: train_loss={train_loss:.4f}  "
+        f"val_loss={val_loss:.4f}"
+    )
 
+    # print a random example from validation set to see behavior
+    if len(val_src) > 0:
+        example_text = random.choice(val_src)
+        model_out = model.generate(example_text)
+        print("  Example src:", example_text[:200], "...")
+        print("  Model out :", model_out)
+        print("-" * 70)
 
-# Save model
+# SAVE MODEL & VOCAB 
 
-SAVE_DIR = Path("models/manual_simplifier")
-SAVE_DIR.mkdir(parents=True, exist_ok=True)
-torch.save(model.state_dict(), SAVE_DIR / "model.pt")
-torch.save(word2idx, SAVE_DIR / "word2idx.pt")
-torch.save(idx2word, SAVE_DIR / "idx2word.pt")
+torch.save(model.state_dict(), MODEL_DIR / "model.pt")
+torch.save(word2idx, MODEL_DIR / "word2idx.pt")
+torch.save(idx2word, MODEL_DIR / "idx2word.pt")
+print("Saved model and vocab to", MODEL_DIR)
 
-print("Saved model and vocab to", SAVE_DIR)
