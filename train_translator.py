@@ -11,18 +11,18 @@ from torch.utils.data import Dataset, DataLoader
 
 #SETTINGS & HYPERPARAMS
 
-DATA_PATH = Path("data/simple_pairs.csv")   # src_legal, tgt_plain
+DATA_PATH = Path("data/real_synthetic_pairs.csv")   # includes both real and synthetic data
 MODEL_DIR = Path("models/manual_simplifier")
 MODEL_DIR.mkdir(parents=True, exist_ok=True)
 
 MIN_FREQ = 2          # minimum word frequency to keep in vocab
-MAX_SRC_LEN = 80      # max tokens for source sentences
-MAX_TGT_LEN = 80      # max tokens for target sentences
+MAX_SRC_LEN = 80      # max # of tokens for source sentences
+MAX_TGT_LEN = 80      # max # of tokens for target sentences
 
 EMBED_DIM = 128
 HIDDEN_DIM = 256
-BATCH_SIZE = 16
-NUM_EPOCHS = 5        # keep small for CPU, can increase later
+BATCH_SIZE = 16       # number of sentences processed at once
+NUM_EPOCHS = 5        # keep small for CPU training
 LEARNING_RATE = 1e-3
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -32,12 +32,12 @@ print("Using device:", DEVICE)
 
 
 def tokenize(text: str):
-    """
-    Very simple tokenizer: lowercase and split on words / punctuation.
-    """
     text = str(text).strip().lower()
     # words or individual non-whitespace characters
-    return re.findall(r"\w+|\S", text)
+    tokens = re.findall(r"\w+|\S", text)
+    tokens = [t for t in tokens if t not in {"[", "]"}] # get rid of brackets so they don't mess up attention because of their high frequency
+    return tokens
+
 
 
 df = pd.read_csv(DATA_PATH)
@@ -143,19 +143,16 @@ print(f"Train size: {len(train_data)}, Val size: {len(val_data)}")
 
 
 class DotAttention(nn.Module):
-    """
-    Luong dot-product attention.
-    """
 
     def __init__(self):
         super().__init__()
 
     def forward(self, hidden, encoder_outputs):
         """
-        hidden: (B, H)       - current decoder hidden state
-        encoder_outputs: (B, src_len, H) - all encoder outputs
-        Returns:
-          context: (B, H)    - weighted sum of encoder_outputs
+        hidden state: (B, H)
+        encoder_outputs: (B, src_len, H)
+        returns:
+          context: (B, H)
           attn_weights: (B, src_len)
         """
         # scores: (B, src_len)
