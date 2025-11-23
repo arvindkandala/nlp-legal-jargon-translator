@@ -9,8 +9,8 @@ import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
 
-# SETTINGS & HYPERPARAMS
-DATA_PATH = Path("data/simple_pairs.csv")
+# SETTINGS & HYPERPARAMETERS
+DATA_PATH = Path("data/combined_pairs.csv")
 MODEL_DIR = Path("models/manual_simplifier")
 MODEL_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -20,10 +20,10 @@ MAX_TGT_LEN = 80
 
 EMBED_DIM = 128
 HIDDEN_DIM = 256
-DROPOUT = 0.3  # ADD DROPOUT!
+DROPOUT = 0.3
 BATCH_SIZE = 16
-NUM_EPOCHS = 5  # Increase epochs
-LEARNING_RATE = 1e-3
+NUM_EPOCHS = 7
+LEARNING_RATE = .005
 CLIP_GRAD = 1.0
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -102,7 +102,7 @@ class LegalSimpleDataset(Dataset):
 n_total = len(src_list)
 n_train = int(0.8 * n_total)
 indices = list(range(n_total))
-random.seed(42)  # Add seed for reproducibility
+random.seed(42)
 random.shuffle(indices)
 train_idx = indices[:n_train]
 val_idx = indices[n_train:]
