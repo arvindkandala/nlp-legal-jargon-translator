@@ -20,10 +20,10 @@ MAX_TGT_LEN = 80
 
 EMBED_DIM = 128
 HIDDEN_DIM = 256
-DROPOUT = 0.3
+DROPOUT = 0.25
 BATCH_SIZE = 16
 NUM_EPOCHS = 7
-LEARNING_RATE = .005
+LEARNING_RATE = .0025
 CLIP_GRAD = 1.0
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
