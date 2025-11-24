@@ -9,7 +9,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
 
-# SETTINGS & HYPERPARAMETERS
+# Settings and hyperparameters
 DATA_PATH = Path("data/combined_pairs.csv")
 MODEL_DIR = Path("models/manual_simplifier")
 MODEL_DIR.mkdir(parents=True, exist_ok=True)
@@ -20,36 +20,36 @@ MAX_TGT_LEN = 80
 
 EMBED_DIM = 128
 HIDDEN_DIM = 256
-DROPOUT = 0.25
+DROPOUT = 0.3
 BATCH_SIZE = 16
-NUM_EPOCHS = 7
-LEARNING_RATE = .0025
+NUM_EPOCHS = 60 #not all 60 are likely to be run because of early stopping
+LEARNING_RATE = .001
 CLIP_GRAD = 1.0
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print("Using device:", DEVICE)
 
-# TOKENIZATION
+# Tokenization
 def tokenize(text: str):
     text = str(text).strip().lower()
     tokens = re.findall(r"\w+|\S", text)
     tokens = [t for t in tokens if t not in {"[", "]"}]
     return tokens
 
-# LOAD DATA
+# Load data
 df = pd.read_csv(DATA_PATH)
 src_list = df["src_legal"].astype(str).tolist()
 tgt_list = df["tgt_plain"].astype(str).tolist()
 
 print(f"Loaded {len(src_list)} pairs from {DATA_PATH}")
 
-# BUILD VOCAB
+# Buiild vocabulary
 counter = Counter()
 for s, t in zip(src_list, tgt_list):
     counter.update(tokenize(s))
     counter.update(tokenize(t))
 
-PAD = "<pad>"
+PAD = "<pad>" #in case you want to pad the sentences to make it fit a specific length
 UNK = "<unk>"
 SOS = "<sos>"
 EOS = "<eos>"
@@ -81,7 +81,7 @@ def encode(text: str, max_len: int):
         ids[-1] = EOS_IDX
     return ids
 
-# DATASET
+# Dataset and DataLoader
 class LegalSimpleDataset(Dataset):
     def __init__(self, src_list, tgt_list):
         self.src_list = src_list
@@ -98,7 +98,7 @@ class LegalSimpleDataset(Dataset):
             torch.tensor(tgt_ids, dtype=torch.long),
         )
 
-# SPLIT DATA
+# Split the data
 n_total = len(src_list)
 n_train = int(0.8 * n_total)
 indices = list(range(n_total))
@@ -120,18 +120,18 @@ val_loader = DataLoader(val_data, batch_size=BATCH_SIZE, shuffle=False, drop_las
 
 print(f"Train size: {len(train_data)}, Val size: {len(val_data)}")
 
-# MODEL WITH IMPROVEMENTS
+#attention mechanism
 class DotAttention(nn.Module):
     def __init__(self):
         super().__init__()
 
     def forward(self, hidden, encoder_outputs, src_mask=None):
         """
-        hidden: (B, H)
-        encoder_outputs: (B, src_len, H)
+        hidden state dimension: (B, H)
+        encoder_outputs tnesor dimensions: (B, src_len, H)
         src_mask: (B, src_len) - 1 for valid, 0 for padding
         """
-        scores = torch.bmm(encoder_outputs, hidden.unsqueeze(2)).squeeze(2)  # (B, src_len)
+        scores = torch.bmm(encoder_outputs, hidden.unsqueeze(2)).squeeze(2)  #(B, src_len)
         
         if src_mask is not None:
             scores = scores.masked_fill(src_mask == 0, -1e9)
@@ -157,13 +157,12 @@ class Seq2Seq(nn.Module):
         self.out = nn.Linear(hidden_dim * 2, vocab_size)
 
     def create_mask(self, src):
-        """Create mask for padding tokens"""
         return (src != self.pad_idx).long()
 
     def forward(self, src, tgt, teacher_forcing_ratio=0.5):
         batch_size, tgt_len = tgt.shape
         
-        # Encode
+        #Encode
         src_mask = self.create_mask(src)
         embedded_src = self.embed_dropout(self.embedding(src))
         encoder_outputs, hidden = self.encoder(embedded_src)
@@ -191,9 +190,6 @@ class Seq2Seq(nn.Module):
         return logits
 
     def generate(self, src_text, max_len=MAX_TGT_LEN, repetition_penalty=1.2):
-        """
-        Greedy decoding with repetition penalty
-        """
         self.eval()
         with torch.no_grad():
             src_ids = encode(src_text, MAX_SRC_LEN)
@@ -205,7 +201,7 @@ class Seq2Seq(nn.Module):
 
             input_tok = torch.tensor([SOS_IDX], dtype=torch.long, device=DEVICE)
             outputs = []
-            token_counts = Counter()  # Track token usage
+            token_counts = Counter()  #track token usage to see if they get excessively repeated
 
             for _ in range(max_len):
                 embedded = self.embedding(input_tok).unsqueeze(1)
@@ -216,7 +212,7 @@ class Seq2Seq(nn.Module):
                 combined = torch.cat([dec_output.squeeze(1), context], dim=1)
                 step_logits = self.out(combined)
                 
-                # Apply repetition penalty
+                # apply repetition penalty
                 for token_id, count in token_counts.items():
                     if count > 0:
                         step_logits[0, token_id] /= (repetition_penalty ** count)
@@ -237,7 +233,7 @@ class Seq2Seq(nn.Module):
 model = Seq2Seq(vocab_size, EMBED_DIM, HIDDEN_DIM, PAD_IDX, DROPOUT).to(DEVICE)
 print(model)
 
-# TRAINING
+#training setup
 criterion = nn.CrossEntropyLoss(ignore_index=PAD_IDX)
 optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=2)
@@ -246,7 +242,7 @@ def train_epoch(model, loader, epoch):
     model.train()
     total_loss = 0.0
     
-    # Gradually decrease teacher forcing
+    # Decrease teacher forcing as training progresses
     tf_ratio = max(0.5, 0.9 - epoch * 0.05)
 
     for src_batch, tgt_batch in loader:
@@ -290,7 +286,7 @@ def eval_epoch(model, loader):
     return total_loss / len(loader.dataset)
 
 
-# TRAINING LOOP
+# Training loop with early stopping in case the validation loss does not go down
 best_val_loss = float('inf')
 patience = 5
 patience_counter = 0
@@ -303,7 +299,7 @@ for epoch in range(1, NUM_EPOCHS + 1):
 
     print(f"Epoch {epoch}: train_loss={train_loss:.4f}  val_loss={val_loss:.4f}")
 
-    # Early stopping
+    #Early stopping
     if val_loss < best_val_loss:
         best_val_loss = val_loss
         patience_counter = 0
@@ -314,7 +310,7 @@ for epoch in range(1, NUM_EPOCHS + 1):
             print(f"Early stopping at epoch {epoch}")
             break
 
-    # Example outputs
+    #Example outputs
     if len(val_src) > 0:
         example_text = random.choice(val_src)
         model_out = model.generate(example_text)
@@ -322,7 +318,7 @@ for epoch in range(1, NUM_EPOCHS + 1):
         print("  Model out  :", model_out)
         print("-" * 70)
 
-# SAVE
+
 torch.save(model.state_dict(), MODEL_DIR / "model.pt")
 torch.save(word2idx, MODEL_DIR / "word2idx.pt")
 torch.save(idx2word, MODEL_DIR / "idx2word.pt")
