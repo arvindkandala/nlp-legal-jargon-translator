@@ -15,7 +15,7 @@ from sklearn.model_selection import train_test_split
 
 # Configuration
 DATA_PATH = Path("data/real_pairs.csv")
-MODEL_DIR = Path("models/t5_legal_simplifier")
+MODEL_DIR = Path("/content/drive/MyDrive/nlp-project/models/t5_legal_simplifier")
 MODEL_DIR.mkdir(parents=True, exist_ok=True)
 
 MODEL_NAME = "t5-base"  # or "t5-small" for faster training
@@ -27,7 +27,7 @@ LEARNING_RATE = 5e-5
 
 # Check for GPU
 if not torch.cuda.is_available():
-    print("⚠️  WARNING: No GPU detected. Training will be very slow.")
+    print(" WARNING: No GPU detected. Training will be very slow.")
     print("   In Colab: Runtime → Change runtime type → GPU")
 else:
     print(f"✓ GPU detected: {torch.cuda.get_device_name(0)}")
@@ -119,6 +119,11 @@ def compute_metrics(eval_preds):
     if isinstance(predictions, tuple):
         predictions = predictions[0]
     
+    # CRITICAL FIX: Replace invalid token IDs in predictions
+    # Clip predictions to valid token ID range (0 to vocab_size - 1)
+    predictions = np.where(predictions >= 0, predictions, tokenizer.pad_token_id)
+    predictions = np.where(predictions < len(tokenizer), predictions, tokenizer.pad_token_id)
+    
     # Decode predictions and labels
     decoded_preds = tokenizer.batch_decode(predictions, skip_special_tokens=True)
     
@@ -157,6 +162,7 @@ def compute_metrics(eval_preds):
         'rougeL': rouge_result['rougeL'],
         'bertscore_f1': np.mean(bertscore_result['f1'])
     }
+
 
 # Training arguments - FIXED for transformers 4.40+
 training_args = Seq2SeqTrainingArguments(
