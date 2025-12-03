@@ -212,7 +212,7 @@ class Seq2Seq(nn.Module):
                 combined = torch.cat([dec_output.squeeze(1), context], dim=1)
                 step_logits = self.out(combined)
                 
-                # apply repetition penalty
+                # repetition penalty
                 for token_id, count in token_counts.items():
                     if count > 0:
                         step_logits[0, token_id] /= (repetition_penalty ** count)
@@ -242,7 +242,7 @@ def train_epoch(model, loader, epoch):
     model.train()
     total_loss = 0.0
     
-    # Decrease teacher forcing as training progresses
+    # decrease teacher forcing as training progresses
     tf_ratio = max(0.5, 0.9 - epoch * 0.05)
 
     for src_batch, tgt_batch in loader:
