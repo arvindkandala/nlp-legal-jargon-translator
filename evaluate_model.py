@@ -10,7 +10,7 @@ from sklearn.model_selection import train_test_split
 # Configuration
 # UPDATED: Matches the save path from finetune_t5.py
 MODEL_PATH = Path("models/t5_legal_simplifier/best_model")
-DATA_PATH = Path("data/real_pairs.csv")
+DATA_PATH = Path("data/real_pairs_cleaned.csv")
 RESULTS_PATH = Path("evaluation_results")
 RESULTS_PATH.mkdir(exist_ok=True)
 
@@ -39,17 +39,19 @@ bleu_metric = evaluate.load("bleu")
 rouge_metric = evaluate.load("rouge")
 bertscore_metric = evaluate.load("bertscore")
 
-def simplify_text(legal_text, num_beams=4):
-    input_text = f"simplify legal text: {legal_text}"
-    inputs = tokenizer(input_text, return_tensors="pt", max_length=MAX_LENGTH, truncation=True).to(DEVICE)
+def simplify_text(legal_text, num_beams=5):
+    input_text = f"Rewrite the following legal sentence in plain English: {legal_text}"
+    inputs = tokenizer(input_text, return_tensors="pt", max_length=256, truncation=True).to(DEVICE)
     
     with torch.no_grad():
         outputs = model.generate(
             **inputs, 
-            max_length=MAX_LENGTH, 
-            num_beams=num_beams, 
-            early_stopping=True, 
-            no_repeat_ngram_size=3
+            max_length=256, 
+            num_beams=num_beams,
+            repetition_penalty=2.5,
+            length_penalty=1.0,
+            no_repeat_ngram_size=2,
+            early_stopping=True
         )
     return tokenizer.decode(outputs[0], skip_special_tokens=True)
 
