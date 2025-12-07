@@ -31,8 +31,6 @@ except Exception as e:
 # Load data
 df = pd.read_csv(DATA_PATH)
 
-# UPDATED: Changed test_size to 0.15 to match finetune_t5.py
-# This ensures we evaluate on the same validation set used during training
 _, test_df = train_test_split(df, test_size=0.15, random_state=42)
 print(f"Evaluating on {len(test_df)} test examples")
 
