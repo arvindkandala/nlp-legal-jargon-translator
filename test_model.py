@@ -23,39 +23,32 @@ except Exception as e:
     exit(1)
 
 def simplify_text(legal_text):
-    """Translate legal jargon to plain English"""
     inputs = tokenizer(legal_text, return_tensors="pt", max_length=MAX_LENGTH, truncation=True).to(DEVICE)
     
     with torch.no_grad():
         outputs = model.generate(
             **inputs,
             max_length=MAX_LENGTH,
-            num_beams=6,  # More beams for better quality
-            repetition_penalty=3.0,  # AGGRESSIVE penalty
-            length_penalty=1.2,  # Encourage longer paraphrases
-            no_repeat_ngram_size=3,  # Prevent 3-gram repetition
+            # Balanced Parameters
+            num_beams=5,
+            repetition_penalty=1.2,
+            length_penalty=1.0,
+            no_repeat_ngram_size=3,
             early_stopping=True,
-            do_sample=True,  # ADD: Sampling for diversity
-            temperature=0.7,  # ADD: Temperature for controlled randomness
-            top_p=0.9,  # ADD: Nucleus sampling
+            do_sample=True,
+            temperature=0.7,
+            top_p=0.9,
         )
     return tokenizer.decode(outputs[0], skip_special_tokens=True)
 
-print("="*70)
 print("Enter legal text to simplify (or 'quit' to exit)")
-print("="*70 + "\n")
-
 while True:
-    user_input = input("Legal text: ").strip()
-    
+    user_input = input("\nLegal text: ").strip()
     if user_input.lower() in ['quit', 'exit', 'q']:
-        print("\n✓ Goodbye!")
         break
-    
     if not user_input:
-        print("Please enter some text.\n")
         continue
     
     simplified = simplify_text(user_input)
-    print(f"\nSimplified: {simplified}\n")
-    print("-" * 70 + "\n")
+    print(f"\nSimplified: {simplified}")
+    print("-" * 70)
