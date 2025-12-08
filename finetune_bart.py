@@ -8,6 +8,7 @@ from transformers import (
     Seq2SeqTrainingArguments,
     Seq2SeqTrainer,
     DataCollatorForSeq2Seq,
+    EarlyStoppingCallback  # NEW
 )
 from sklearn.model_selection import train_test_split
 
@@ -20,8 +21,9 @@ MODEL_DIR.mkdir(parents=True, exist_ok=True)
 
 MODEL_NAME = "facebook/bart-base"
 BATCH_SIZE = 8
-NUM_EPOCHS = 30         # Clean data converges faster
-LEARNING_RATE = 7e-5    # OPTIMIZED: The "Goldilocks" rate for BART fine-tuning
+GRADIENT_ACCUMULATION_STEPS = 4  # NEW: Simulates Batch Size of 32 (8 * 4)
+NUM_EPOCHS = 30                  # Increased slightly, Early Stopping will cut it short if needed
+LEARNING_RATE = 6e-5             # The Goldilocks Rate
 
 # ==========================================
 # DATA LOADING
@@ -30,14 +32,13 @@ print("Loading combined training data...")
 df = pd.read_csv(DATA_PATH)
 df = df[['src_legal', 'tgt_plain']].dropna()
 
-# Basic filtering to ensure no empty strings
+# Basic filtering
 df = df[df['src_legal'].str.strip().astype(bool)]
 df = df[df['tgt_plain'].str.strip().astype(bool)]
 
 print(f"Total dataset: {len(df)} pairs")
 
 # Split Data
-# 1. Isolate Real Data (first 600 rows)
 REAL_DATA_COUNT = 600
 df_real = df.iloc[:REAL_DATA_COUNT].copy()
 df_synthetic = df.iloc[REAL_DATA_COUNT:].copy()
@@ -45,12 +46,12 @@ df_synthetic = df.iloc[REAL_DATA_COUNT:].copy()
 print(f"  Real data: {len(df_real)} pairs")
 print(f"  Synthetic data: {len(df_synthetic)} pairs")
 
-# 2. Create Held-out Test Set (Real data only)
+# Create Held-out Test Set
 real_trainval, real_test = train_test_split(df_real, test_size=0.15, random_state=42)
 real_test.to_csv('data/real_test_set.csv', index=False)
 print(f"\n✓ Saved {len(real_test)} real pairs for testing")
 
-# 3. Combine remaining Real + Synthetic for training
+# Combine for training
 trainval_combined = pd.concat([real_trainval, df_synthetic], ignore_index=True)
 train_df, val_df = train_test_split(trainval_combined, test_size=0.15, random_state=42)
 
@@ -100,13 +101,14 @@ training_args = Seq2SeqTrainingArguments(
     learning_rate=LEARNING_RATE,
     per_device_train_batch_size=BATCH_SIZE,
     per_device_eval_batch_size=BATCH_SIZE,
+    gradient_accumulation_steps=GRADIENT_ACCUMULATION_STEPS, # NEW: Stability
     num_train_epochs=NUM_EPOCHS,
     
     # Regularization
     weight_decay=0.01,
-    label_smoothing_factor=0.1,  # OPTIMIZED: Standard 0.1 allows reasonable confidence
-    max_grad_norm=1.0,           # Standard gradient clipping
-    warmup_steps=500,            # Prevents initial shock
+    label_smoothing_factor=0.1,
+    max_grad_norm=1.0,
+    warmup_steps=500,
     
     # Model Saving
     save_total_limit=2,
@@ -118,7 +120,6 @@ training_args = Seq2SeqTrainingArguments(
     report_to="none",
     
     # DIVERSITY (Validation only)
-    # This helps the "best model" selection favor one that doesn't just copy
     generation_num_beams=4,
     diversity_penalty=0.3,
     forced_bos_token_id=None,
@@ -131,6 +132,7 @@ trainer = Seq2SeqTrainer(
     eval_dataset=tokenized_val,
     tokenizer=tokenizer,
     data_collator=DataCollatorForSeq2Seq(tokenizer, model=model),
+    callbacks=[EarlyStoppingCallback(early_stopping_patience=5)] # NEW: Stops if no improvement for 3 epochs
 )
 
 print("\nStarting Training...")
