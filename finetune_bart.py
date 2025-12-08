@@ -20,7 +20,7 @@ MODEL_DIR.mkdir(parents=True, exist_ok=True)
 
 MODEL_NAME = "facebook/bart-base"
 BATCH_SIZE = 8
-NUM_EPOCHS = 20         # Clean data converges faster
+NUM_EPOCHS = 30         # Clean data converges faster
 LEARNING_RATE = 5e-5    # OPTIMIZED: The "Goldilocks" rate for BART fine-tuning
 
 # ==========================================
