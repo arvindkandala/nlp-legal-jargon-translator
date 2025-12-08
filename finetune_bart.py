@@ -8,7 +8,7 @@ from transformers import (
     Seq2SeqTrainingArguments,
     Seq2SeqTrainer,
     DataCollatorForSeq2Seq,
-    EarlyStoppingCallback  # NEW
+    EarlyStoppingCallback
 )
 from sklearn.model_selection import train_test_split
 
@@ -21,9 +21,8 @@ MODEL_DIR.mkdir(parents=True, exist_ok=True)
 
 MODEL_NAME = "facebook/bart-base"
 BATCH_SIZE = 8
-GRADIENT_ACCUMULATION_STEPS = 4  # NEW: Simulates Batch Size of 32 (8 * 4)
-NUM_EPOCHS = 30                  # Increased slightly, Early Stopping will cut it short if needed
-LEARNING_RATE = 6e-5             # The Goldilocks Rate
+NUM_EPOCHS = 30
+LEARNING_RATE = 5e-5
 
 # ==========================================
 # DATA LOADING
@@ -101,7 +100,6 @@ training_args = Seq2SeqTrainingArguments(
     learning_rate=LEARNING_RATE,
     per_device_train_batch_size=BATCH_SIZE,
     per_device_eval_batch_size=BATCH_SIZE,
-    gradient_accumulation_steps=GRADIENT_ACCUMULATION_STEPS, # NEW: Stability
     num_train_epochs=NUM_EPOCHS,
     
     # Regularization
@@ -132,7 +130,7 @@ trainer = Seq2SeqTrainer(
     eval_dataset=tokenized_val,
     tokenizer=tokenizer,
     data_collator=DataCollatorForSeq2Seq(tokenizer, model=model),
-    callbacks=[EarlyStoppingCallback(early_stopping_patience=5)] # NEW: Stops if no improvement for 3 epochs
+    callbacks=[EarlyStoppingCallback(early_stopping_patience=5)]
 )
 
 print("\nStarting Training...")
